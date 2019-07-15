@@ -118,8 +118,11 @@ fun! undofile_warn#undo() abort
 			let b:undofile_warn_warned = []
 			return ''
 		endif
-	" Press y to confirm (no enter).
+	" No special handling needed.
 	elseif g:undofile_warn_mode == 3
+		continue
+	" Press y to confirm (no enter).
+	elseif g:undofile_warn_mode == 4
 		echohl ErrorMsg | echo 'Using undofile; press y to continue.' | echohl None
 		while 1
 			let c = getchar()
