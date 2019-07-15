@@ -118,6 +118,19 @@ fun! undofile_warn#undo() abort
 			let b:undofile_warn_warned = []
 			return ''
 		endif
+	" Press y to confirm (no enter).
+	elseif g:undofile_warn_mode == 3
+		echohl ErrorMsg | echo 'Using undofile; press y to continue.' | echohl None
+		while 1
+			let c = getchar()
+			if c == char2nr('u')
+				continue
+			elseif c != char2nr('y')
+				let b:undofile_warn_warned = []
+			endif
+			echo ''
+			return ''
+		endwhile
 	else
 		echoerr 'Invalid value for g:undofile_warn_mode: ' . g:undofile_warn_mode
 	endif
@@ -136,11 +149,11 @@ fun! undofile_warn#redo() abort
 		let b:undofile_warn_warned = []
 	endif
 endfun
-	
+
 
 " Do something sane when an error occurred.
 fun! s:check_valid_file() abort
-	" E823: Not an undo file: /home/martin/.vim/tmp/undo/%home%martin%src%qutebrowser%tests%utils%test_urlutils.py 
+	" E823: Not an undo file: /home/martin/.vim/tmp/undo/%home%martin%src%qutebrowser%tests%utils%test_urlutils.py
 	" I've sometimes had it happen that after a crash (Vim or system) the undo
 	" file is completely empty, in which case it makes no sense keeping it.
 	"
